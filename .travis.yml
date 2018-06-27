@@ -1,0 +1,22 @@
+language: node_js
+
+node_js:
+  - 6
+
+script:
+  - npm run build
+
+cache:
+  directories:
+    - node_modules
+
+deploy:
+  provider: npm
+  email: ben@3sq.re
+  skip_cleanup: true
+  api_key:
+    secure: GNmwh8QogIpXj3gDneBmyr3dzkiygcb6VsFkEAls/Dr+WGJNtSlf2CTz6IlLCryzYY4QNp62Ncx3aTFA+xokKYYcCdr2GWMfHUAAamzq5xfU5huvj8+Pn3va5C83zMX9C61jiGg2wQyztEyTWV7ULC8Ljgn4NS2g/Nki+IDpCObozhuF+Kz7QbwmMrTASmJ0u/PGanqZ5aOp1w0lDc5BsCVbTUbAoJNUgNxHdgOBgzagssltcRbJO1zXZY3xyyDkYAyARA2Ac2Eu6gwXsMYIdVNjcywkRFVl1A1bbbH98tNZnjvq0yFSYFc0j1Rc3c2Kr15jtl3G3J0rbjSngjShtpzTYsDXjL7l2r/PGr3TQzvZr505rZlQ48SrYeRV2l/pwO/AymF/9ZMN0PdXzhNprVNxRr1vlamcbLD0F8Q8TrkJLJOF+iQ1TxipwQsHofIyMLauWEqTlQBZ65A7gLCtnjTXIYXa+JbUhupkcqSV9e5oKpVDdv2yZEja0Fjx6vTtZ5iNr9RC8YHLmGU3QqMB8ZlHBOUWjNd+0xKH/+4m2zeFKyHYsE0JPmmHmUXmkBYTB7IPJpi67iltZhmxUHZxXNWT14EiwTFrmXXd1kKMoZh1rspn29QyCCXcy1d48RAkFfD5f5l3fE8NpSNro02/vzru4HIcNPVK89E+/UeqtsU=
+  on:
+    branch: master
+    tags: true
+    repo: send-shit/cli
