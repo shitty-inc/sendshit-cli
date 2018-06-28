@@ -6,7 +6,7 @@ import ora from 'ora';
 import mime from 'mime';
 
 const args: string[] = process.argv.slice(2);
-const domain: string = 'https://new.sendsh.it';
+const domain: string = 'https://api.sendsh.it';
 
 /**
  * Read a file from disk.
@@ -55,7 +55,7 @@ async function uploadFile(encryptedData: Buffer) {
     const formData: FormData = new FormData();
     formData.append('upload', encryptedData.toString('hex'), 'encrypted');
 
-    return axios.post(`${domain}/api/upload`, formData, {
+    return axios.post(`${domain}/upload`, formData, {
         headers: formData.getHeaders(),
     });
 }
@@ -73,7 +73,7 @@ async function main(fileName: string) {
     const spinner = new ora('Encrypting some shit').start();
 
     const key: string = await new Promise<string>(resolve =>
-        triplesec.prng.generate(24, (words: WordArray) =>
+        triplesec.prng.generate(24, (words: triplesec.WordArray) =>
             resolve(words.to_hex())
         )
     );
@@ -101,7 +101,7 @@ async function main(fileName: string) {
         process.exit(1);
     }
 
-    const url: string = `${domain}/#/${response.data.id}/${key}`;
+    const url: string = `https://sendsh.it/#/${response.data.id}/${key}`;
 
     spinner.succeed(url);
     process.exit();
