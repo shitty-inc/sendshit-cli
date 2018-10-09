@@ -27,4 +27,7 @@ deploy:
     - sendshit.linux.amd64
   on:
     repo: shitty-inc/sendshit-cli
+    branches:
+      only:
+        - go
     condition: $LATEST = true
