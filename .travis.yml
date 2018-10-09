@@ -1,21 +1,30 @@
-language: node_js
+language: go
 
-node_js:
-  - 6
+sudo: false
+
+matrix:
+  include:
+    - go: 1.x
+      env: LATEST=true
+
+before_install:
+  - go get github.com/mitchellh/gox
 
 script:
-  - npm run build
-
-cache:
-  directories:
-    - node_modules
+  - go get -t -v ./...
+  - diff -u <(echo -n) <(gofmt -d .)
+  - go vet $(go list ./... | grep -v /vendor/)
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="sendshit.." -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
 
 deploy:
-  provider: npm
-  email: ben@3sq.re
+  provider: releases
   skip_cleanup: true
   api_key:
-    secure: GNmwh8QogIpXj3gDneBmyr3dzkiygcb6VsFkEAls/Dr+WGJNtSlf2CTz6IlLCryzYY4QNp62Ncx3aTFA+xokKYYcCdr2GWMfHUAAamzq5xfU5huvj8+Pn3va5C83zMX9C61jiGg2wQyztEyTWV7ULC8Ljgn4NS2g/Nki+IDpCObozhuF+Kz7QbwmMrTASmJ0u/PGanqZ5aOp1w0lDc5BsCVbTUbAoJNUgNxHdgOBgzagssltcRbJO1zXZY3xyyDkYAyARA2Ac2Eu6gwXsMYIdVNjcywkRFVl1A1bbbH98tNZnjvq0yFSYFc0j1Rc3c2Kr15jtl3G3J0rbjSngjShtpzTYsDXjL7l2r/PGr3TQzvZr505rZlQ48SrYeRV2l/pwO/AymF/9ZMN0PdXzhNprVNxRr1vlamcbLD0F8Q8TrkJLJOF+iQ1TxipwQsHofIyMLauWEqTlQBZ65A7gLCtnjTXIYXa+JbUhupkcqSV9e5oKpVDdv2yZEja0Fjx6vTtZ5iNr9RC8YHLmGU3QqMB8ZlHBOUWjNd+0xKH/+4m2zeFKyHYsE0JPmmHmUXmkBYTB7IPJpi67iltZhmxUHZxXNWT14EiwTFrmXXd1kKMoZh1rspn29QyCCXcy1d48RAkFfD5f5l3fE8NpSNro02/vzru4HIcNPVK89E+/UeqtsU=
+    secure: wHqq6Em56Dhkq4GHqdTXfNWB1NU2ixD0/z88Hu31MFXc+Huz5p6np0PUNBOvO9jSFpSzrSGFpsD5lkExAU9rBOI9owSRiEHpR1krIFbMmCboNqNr1uXxzxam9NWLgH8ltL2LNX3hp5teYnNpE4EhIDsGqORR4BrgXfH4eK7mvj/93kDRF2Wxt1slRh9VlxPSQEUxJ1iQNy3lbZ6U2+wouD8TaaJFgzPtueMyyIj2ASQdSlWMRyCVXJPKKgbRd5jLo2XHAWmmDb9mC8u8RS5QlB1klJjGCOl7gNC0KHYknHk6sUVpgIdnmszQBdVMlrZ6yToFDSFI28pj0PDmpb3KFfLauatyQ/bOfDoJFQQWgxyy30du89PawLmqeMoIXUQoA8IWF3nl/YhD+xsLCL1UH3kZdVZStwS/EhMcKqXBPn/AFi1Vbh7m+OMJAVvZp3xnFDe/H8tymczOWy4vDnyfXZQagLMsTouS/SosCFjjeL/Rdz6AEcQRq5bYAiQBhjVwlobNxZSMXWatNSaGz3z78dPEx9qfHnKixmBTacrJd6NlBhWH1kvg1c7TT2zlPxt6XTtsq7Ts/oKNF2iXXhw8HuzZv1idCiWfxobdajZE3EY+8akR060ktT4KEgRmCC/0h6ncPVT0Vaba1XZvbjlraol/p3tswXgGodPsKL87AgM=
+  file:
+    - sendshit.windows.amd64.exe
+    - sendshit.darwin.amd64
+    - sendshit.linux.amd64
   on:
-    branch: master
     repo: shitty-inc/sendshit-cli
+    condition: $LATEST = true

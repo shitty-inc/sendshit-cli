@@ -1,2 +1,2 @@
-cli.js
-/node_modules
+bin
+vendor
