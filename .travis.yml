@@ -20,14 +20,12 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: wHqq6Em56Dhkq4GHqdTXfNWB1NU2ixD0/z88Hu31MFXc+Huz5p6np0PUNBOvO9jSFpSzrSGFpsD5lkExAU9rBOI9owSRiEHpR1krIFbMmCboNqNr1uXxzxam9NWLgH8ltL2LNX3hp5teYnNpE4EhIDsGqORR4BrgXfH4eK7mvj/93kDRF2Wxt1slRh9VlxPSQEUxJ1iQNy3lbZ6U2+wouD8TaaJFgzPtueMyyIj2ASQdSlWMRyCVXJPKKgbRd5jLo2XHAWmmDb9mC8u8RS5QlB1klJjGCOl7gNC0KHYknHk6sUVpgIdnmszQBdVMlrZ6yToFDSFI28pj0PDmpb3KFfLauatyQ/bOfDoJFQQWgxyy30du89PawLmqeMoIXUQoA8IWF3nl/YhD+xsLCL1UH3kZdVZStwS/EhMcKqXBPn/AFi1Vbh7m+OMJAVvZp3xnFDe/H8tymczOWy4vDnyfXZQagLMsTouS/SosCFjjeL/Rdz6AEcQRq5bYAiQBhjVwlobNxZSMXWatNSaGz3z78dPEx9qfHnKixmBTacrJd6NlBhWH1kvg1c7TT2zlPxt6XTtsq7Ts/oKNF2iXXhw8HuzZv1idCiWfxobdajZE3EY+8akR060ktT4KEgRmCC/0h6ncPVT0Vaba1XZvbjlraol/p3tswXgGodPsKL87AgM=
+    secure: JTyWoDZpaORGL6Zdjf3HJt1P95foQaaZ0+Ockbo9YzqBSdxRdyBj+s5dGTWzFmVFQQ4lsrKAa2s4Ao8L9JQOhMn1GM5Hf0SuuWe9nNDchUDcT9qPbO5dmDnib88Po/5MPvnmUV/m4WTvSbMsK1n8YIOa3Ggnp2FANSUiOce+IGPE6/ZqmaUJ5JqZh9ZYckFTewq2ccoOPad9rpbTQkZP1jFy2kL2iNqyCC6pelK0Fo0sH+KvlakAgN88tXAJVQt3HVFvs5GhK1LknMEjZxYZhQcDSeon6YhCXME7kmpcmXMROOxAebV1t42aflv5rpCDQ9bhqM2XF6nq5RpzCm2YJUhd6VaOvBI9tgmd4n8d/OcEhvO1rYK59qJS7wDvfp1nqvkUwBELp2mSEJWvRc695kBbNlweFIbdkKR/AEJ3Yx5EIyppOjr1bisg6rwFnZcrrZsy+LqmWk/2/u58B3Zl+JZ7uHp05b2/1mm5F4wSbODUK7S0qj1B71PbntzsnaOtqbVKhddP7JZBnndsorzysFrdgtk5Y1IWZBpbZ9djFcFn+mDdnnYzVYFEZ5VX87lAdAZ9c5814CMRLbUN1B+D+v1ANR93D2wb/O7kbW9NTi9CeQ7/f3S2CWudVHpCU1QREFSV+L7rWQ/dIBRYXmRky4Cv8zkR6Odkf1sBLm65nik=
   file:
     - sendshit.windows.amd64.exe
     - sendshit.darwin.amd64
     - sendshit.linux.amd64
   on:
     repo: shitty-inc/sendshit-cli
-    branches:
-      only:
-        - go
     condition: $LATEST = true
+    tags: true

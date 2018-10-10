@@ -10,7 +10,9 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/keybase/go-triplesec"
 	"github.com/vincent-petithory/dataurl"
 )
@@ -103,27 +105,42 @@ func main() {
 	path := os.Args[1]
 	file, err := ioutil.ReadFile(path)
 
+	spinner := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
+	spinner.Start()
+	spinner.Suffix = " Encrypting some shit..."
+	spinner.Writer = os.Stderr
+
 	if err != nil {
-		fmt.Println("Couldn't read that shit")
+		spinner.FinalMSG = "Couldn't read that shit"
+		spinner.Stop()
+		os.Exit(1)
 	}
 
 	key, err := generateRandomString(24)
 
 	if err != nil {
-		fmt.Println("Couldn't generate a key")
+		spinner.FinalMSG = "Couldn't generate a key"
+		spinner.Stop()
+		os.Exit(1)
 	}
 
 	encodedStr, err := encryptFile(path, file, key)
 
 	if err != nil {
-		fmt.Println("Couldn't encrypt that shit")
+		spinner.FinalMSG = "Couldn't encrypt that shit"
+		spinner.Stop()
+		os.Exit(1)
 	}
 
 	response, err := uploadFile(encodedStr)
 
 	if err != nil {
-		fmt.Println("Couldn't upload that shit")
+		spinner.FinalMSG = "Couldn't upload that shit"
+		spinner.Stop()
+		os.Exit(1)
 	}
 
-	fmt.Printf("https://sendsh.it/#/%v/%v", response.ID, key)
+	spinner.Stop()
+
+	fmt.Printf("https://sendsh.it/#/%s/%s\n", response.ID, key)
 }

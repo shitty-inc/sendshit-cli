@@ -36,3 +36,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/vincent-petithory/dataurl"
+
+[[constraint]]
+  name = "github.com/briandowns/spinner"
+  version = "1.3.0"
