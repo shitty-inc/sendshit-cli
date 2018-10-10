@@ -28,4 +28,4 @@ deploy:
   on:
     repo: shitty-inc/sendshit-cli
     condition: $LATEST = true
-    branch: master
+    tags: true
