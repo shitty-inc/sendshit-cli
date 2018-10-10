@@ -1,21 +1,31 @@
-language: node_js
+language: go
 
-node_js:
-  - 6
+sudo: false
+
+matrix:
+  include:
+    - go: 1.x
+      env: LATEST=true
+
+before_install:
+  - go get github.com/mitchellh/gox
 
 script:
-  - npm run build
-
-cache:
-  directories:
-    - node_modules
+  - go get -t -v ./...
+  - diff -u <(echo -n) <(gofmt -d .)
+  - go vet $(go list ./... | grep -v /vendor/)
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="sendshit-{{.OS}}-{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
 
 deploy:
-  provider: npm
-  email: ben@3sq.re
+  provider: releases
   skip_cleanup: true
   api_key:
-    secure: GNmwh8QogIpXj3gDneBmyr3dzkiygcb6VsFkEAls/Dr+WGJNtSlf2CTz6IlLCryzYY4QNp62Ncx3aTFA+xokKYYcCdr2GWMfHUAAamzq5xfU5huvj8+Pn3va5C83zMX9C61jiGg2wQyztEyTWV7ULC8Ljgn4NS2g/Nki+IDpCObozhuF+Kz7QbwmMrTASmJ0u/PGanqZ5aOp1w0lDc5BsCVbTUbAoJNUgNxHdgOBgzagssltcRbJO1zXZY3xyyDkYAyARA2Ac2Eu6gwXsMYIdVNjcywkRFVl1A1bbbH98tNZnjvq0yFSYFc0j1Rc3c2Kr15jtl3G3J0rbjSngjShtpzTYsDXjL7l2r/PGr3TQzvZr505rZlQ48SrYeRV2l/pwO/AymF/9ZMN0PdXzhNprVNxRr1vlamcbLD0F8Q8TrkJLJOF+iQ1TxipwQsHofIyMLauWEqTlQBZ65A7gLCtnjTXIYXa+JbUhupkcqSV9e5oKpVDdv2yZEja0Fjx6vTtZ5iNr9RC8YHLmGU3QqMB8ZlHBOUWjNd+0xKH/+4m2zeFKyHYsE0JPmmHmUXmkBYTB7IPJpi67iltZhmxUHZxXNWT14EiwTFrmXXd1kKMoZh1rspn29QyCCXcy1d48RAkFfD5f5l3fE8NpSNro02/vzru4HIcNPVK89E+/UeqtsU=
+    secure: OxgEM+VZkK90LRLyd5HM4dqKrOBVVEcd9X3ew65QX5uGrg55Q9fFbZVxYMzS6+huYGYXVBR9iViJHw+GmR3yGfZO+rjsybqBfSF4QM95zEmxDycNpqjrtpQbwLt5VXUc3Rm/BWHCdqmbZ5FdePHTvbOpGfBSmLOimZpsergvk4E48A2XUo09yTtqwTf8RRaOuQgrgv2tCUlJS7ICO+hdN6ssfeqPPvm/hkOAyWM+zY0aBMKRXZ1hSVoQ2wcf0KuoRAT4aYWGpYfjfPbZWQqTKeRGWx9e0vbyxKhDvhXvE36hW8AQnxPYrRPY1rHF61+8jLPaTkfIqM2gtnXn8KgXFqLxLfXPwZGL5BF3d7cYlZ3mu1KmI0s027IhCWC+YuEeR+yATk5Ahfp6xrMzNDsjCr8gn4SEH6RAJLu9QYHpjgy2SRrxqUVu4h6scFWvLAJMLQYdm90fyMvn5EpeL0nnD/OVcfdDKtHTxN3jQqD8SV5CPw26RnIacGUbdXy8K6koTsHmHGJScmpjggmanuBg0xVp4FeAwBwHN5X7C0hSdKMKuhy2MhqwZafqy5mLua2KQk0Ud2IT+yxfez6k6JnOKI+XJClDh1qsE9WnMIy9NuPC3oKIMqnbrq+Ht4vqVL2ox88H5fZ0//fxlHYQPm9ai97jeL84kF/TiUkq9ZMqC/8=
+  file:
+    - sendshit-windows-amd64.exe
+    - sendshit-darwin-amd64
+    - sendshit-linux-amd64
   on:
-    branch: master
     repo: shitty-inc/sendshit-cli
+    condition: $LATEST = true
+    tags: true
